@@ -1,5 +1,8 @@
 namespace WebApi.Entities
 {
+    /// <summary>
+    /// Définition d'un Utilisateur
+    /// </summary>
     public class User
     {
         public int Id { get; set; }

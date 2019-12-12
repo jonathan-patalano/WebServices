@@ -8,21 +8,19 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using WebApi.Entities;
 using WebApi.Helpers;
+using WebApi.IServices;
 
 namespace WebApi.Services
 {
-    public interface IUserService
-    {
-        User Authenticate(string username, string password);
-        IEnumerable<User> GetAll();
-    }
-
     public class UserService : IUserService
     {
-        // users hardcoded for simplicity, store in a db with hashed passwords in production applications
+        #region Propriétés
+
+        // Utilisateurs codés en dur pour plus de simplicité
+        // Stockés dans une base de données avec des mots de passe hachés dans les applications de production.
         private List<User> _users = new List<User>
         { 
-            new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" } 
+            new User { Id = 1, FirstName = "Jonathan", LastName = "Patalano", Username = "jopatalano", Password = "azerty" } 
         };
 
         private readonly AppSettings _appSettings;
@@ -32,15 +30,23 @@ namespace WebApi.Services
             _appSettings = appSettings.Value;
         }
 
+        #endregion
+
+        /// <summary>
+        /// Authentification d'un utilisateur.
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public User Authenticate(string username, string password)
         {
             var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
 
-            // return null if user not found
+            // Retourne null si l'utilisateur n'a pas été trouvée.
             if (user == null)
                 return null;
 
-            // authentication successful so generate jwt token
+            // Authentification réussie donc génére un token jwt.
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -58,6 +64,10 @@ namespace WebApi.Services
             return user.WithoutPassword();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<User> GetAll()
         {
             return _users.WithoutPasswords();
