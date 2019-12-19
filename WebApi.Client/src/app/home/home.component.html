@@ -1,0 +1,9 @@
+﻿<h1>Salut {{currentUser.firstName}}!</h1>
+<p>Tu est bien connecté</p>
+<h3>Tous les utilisateurs enregistrés:</h3>
+<ul>
+    <li *ngFor="let user of users">
+        {{user.username}} ({{user.firstName}} {{user.lastName}})
+        - <a (click)="deleteUser(user.id)" class="text-danger">Supprimer</a>
+    </li>
+</ul>
